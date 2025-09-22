@@ -2,8 +2,13 @@
 ### 1.Objetivo
 - pasar la materia del profe treviño y graduarnos
 ### 2.integrantes
-#### datos personales
+#### Datos personales
 - Leonardo Vargas Lopez
+- Edad:
+- Correo Electronico:
+- Especialidad:
+- Institucion:
+  #### fotografia
  <img width="236" height="248" alt="image" src="https://github.com/user-attachments/assets/e526fa82-66ea-4b21-9d92-b7ee81f6ef2d" />
 
 - Jacobo Hernandez
