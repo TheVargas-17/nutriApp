@@ -1,8 +1,8 @@
  # Documenracion De La Apliacion
-- Objetivo
+### Objetivo
 - 
-## integrantes
+### integrantes
 --Leonardo vargas lopez
 -- Loretto molina
 -- Luis avila
-- Analisis de la Base de Datos
+###Analisis de la Base de Datos
