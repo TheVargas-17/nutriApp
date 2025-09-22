@@ -1,6 +1,6 @@
  # Documenracion De La Apliacion
 ### 1.Objetivo
-- 
+- pasar la materia del profe treviño y graduarnos
 ### 2.integrantes
 - Leonardo vargas lopez
 - Loretto molina
