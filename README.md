@@ -1,6 +1,7 @@
  # Documenracion De La Apliacion
 - Objetivo
-- integrantes
+- 
+## integrantes
 --Leonardo vargas lopez
 -- Loretto molina
 -- Luis avila
