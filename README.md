@@ -1,6 +1,6 @@
- # Documenracion De La Apliacion
+ # Documentacion De La Aplicacion
 ### 1.Objetivo
-- llevar a nustra comunidad esta informacion para que sepan cuidarse ,como alimentarse ,que dieta llevar,para que nuestra comunidad este saludable
+- llevar a nuestra comunidad esta informacion para que sepan cuidarse, como alimentarse, que dieta llevar, para que nuestra comunidad este saludable
 ### 2.integrantes
 #### Datos personales
 - Nombre Completo: Leonardo Vargas Lopez
