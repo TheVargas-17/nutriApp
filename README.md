@@ -70,7 +70,7 @@ Innovación: Calificación visual tipo semáforo (Nutriscore).
 ---
 
 ## Tabla Comparativa de Aplicaciones
-<img width="541" height="447" alt="image" src="https://github.com/user-attachments/assets/fa58b6ae-9844-486d-b995-1661a39f7d3c" />
+<img width="507" height="462" alt="image" src="https://github.com/user-attachments/assets/98b9ae91-d517-4aa2-b85e-12bd06bf25b5" />
 
 
 --- 
