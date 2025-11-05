@@ -1,12 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="text-center">
-  <h1 class="mb-4 display-4">Bienvenido a la NutriApp</h1>
-  <p class="lead mb-4">Tu guía para una alimentación saludable. Explora planes, calcula tu IMC y descubre información sobre alimentos.</p>
-  <img src="{{ url_for('static', filename='img/logoNutriAppCetis61.png') }}" width="220" class="mt-3 rounded shadow-sm">
-  <div class="mt-5">
-    <a href="/planes" class="btn btn-primary btn-lg me-2">Ver Planes</a>
-    <a href="/alimentos" class="btn btn-success btn-lg">Consultar Alimentos</a>
+<div class="container mt-5">
+  <div class="row align-items-center">
+
+    <div class="col-md-7 text-center mb-4 mb-md-0">
+      <h1 class="mb-4 display-4">Bienvenido a la NutriApp</h1>
+      <p class="lead mb-4">
+        Tu guía para una alimentación saludable. Explora planes, calcula tu IMC y descubre información sobre alimentos.
+      </p>
+
+      <img src="{{ url_for('static', filename='img/logoNutriAppCetis61.png') }}" width="220" class="mt-3 rounded shadow-sm">
+
+      <div class="mt-5 text-center">
+        <a href="/planes" class="btn btn-primary btn-lg me-2">Ver Planes</a>
+        <a href="/alimentos" class="btn btn-success btn-lg">Consultar Alimentos</a>
+      </div>
+    </div>
+
+    <div class="col-md-5">
+      <div class="alert alert-light shadow-sm border rounded p-4">
+        <h4 class="text-success mb-3"> Dato importante</h4>
+        <p class="mb-0">
+          Cada día es una nueva oportunidad para cuidar de ti. Alimentarte bien no solo transforma tu cuerpo, también mejora tu energía, tu ánimo y tu manera de vivir. 
+          No se trata de ser perfecto, sino de avanzar paso a paso hacia una versión más fuerte y saludable de ti mismo. 
+          Empieza hoy, y verás cómo los pequeños cambios crean grandes resultados.
+        </p>
+      </div>
+    </div>
+
   </div>
 </div>
 {% endblock %}
+
