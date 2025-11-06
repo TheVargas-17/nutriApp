@@ -1,70 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NutriApp</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    body { 
-        padding-top: 70px; 
-        background-color: #ffffff; 
-        color: #e07b39; 
-        font-family: 'Roboto', sans-serif;
-    }
-    .navbar { 
-        background-color:rgb(232, 252, 225); 
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-    }
-    .navbar-brand strong { color: #e07b39; }
-    .nav-link { color:rgb(247, 99, 0) !important; font-weight: 500; }
-    .nav-link:hover { color: #d0692c !important; }
-    .card-hover:hover { transform: scale(1.03); transition: 0.3s; box-shadow: 0 0 10px rgba(224,123,57,0.3); }
-    .btn-primary { background-color: #e07b39; border-color: #e07b39; color: #fff; }
-    .btn-primary:hover { background-color: #d0692c; border-color: #d0692c; }
-    .btn-success { background-color:rgb(219, 248, 206); border-color:rgb(255, 255, 255); color: #fff; }
-    footer { background-color: #fff3e0; font-size: 0.9rem; color: #e07b39; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Mi App{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-white">
 
-<nav class="navbar navbar-expand-lg fixed-top">
-  <div class="container d-flex align-items-center">
-    <a class="navbar-brand d-flex align-items-center me-3" href="/">
-      <img src="{{ url_for('static', filename='img/logoNutriAppCetis61.png') }}" alt="Logo" width="60" height="60" class="me-2 rounded-circle">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">NutriApp</a>
 
-    </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav"
+                    aria-expanded="false" aria-label="Toggle navigation">
 
-    <ul class="navbar-nav me-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="/">Inicio</a>
-      </li>
-    </ul>
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="/planes">Planes</a></li>
-        <li class="nav-item"><a class="nav-link" href="/alimentos">Alimentos</a></li>
-        <li class="nav-item"><a class="nav-link" href="/imc">IMC</a></li>
-        <li class="nav-item"><a class="nav-link" href="/acerca">Acerca de</a></li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
 
-<div class="container my-5">
-  {% block content %}{% endblock %}
-</div>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Inicio</a>
+                    </li>
 
-<footer class="text-center py-3 mt-5">
-  <small>La NutriApp de Jacobo Y Leonardo</small>
-</footer>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/imc">Calcular TMB</a>
+                    </li>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/acerca">Sobre la App</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
