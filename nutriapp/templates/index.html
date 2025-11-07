@@ -3,48 +3,65 @@
 <div class="container mt-5 bg-light rounded p-4">
   <div class="row align-items-center">
 
-    <div class="col-md-7 text-start mb-4 mb-md-0">
-      <h1 class="mb-4 display-4 text-primary">Bienvenido a la nutriapp</h1>
+    <div class="col-md-7 text-center mb-4 mb-md-0">
+      <h1 class="mb-4 display-4 text-primary">Bienvenido a la NutriApp</h1>
       <p class="lead mb-4 text-secondary">
-        Tu guía para una alimentación saludable. Explora planes, calcula tu IMC y descubre información sobre alimentos.
+       la mejor de todas las NutriApps Tu guia para una alimentación saludable. Explora planes, calcula tu IMC y descubre información sobre alimentos.
       </p>
 
-    
       <div class="mt-5 text-center">
-        <a href="/planes" class="btn btn-primary btn-lg me-2 ">Ver Planes</a>
+        <a href="/planes" class="btn btn-primary btn-lg me-2">Ver Metas disponibles</a>
         <a href="/alimentos" class="btn btn-info btn-lg">Consultar Alimentos</a>
       </div>
     </div>
+
     <div class="col-md-5 text-center">
       <div class="card shadow-sm">
-        <img src="{{ url_for('static', filename='img/pepe.png') }}" class="card-img-top rounded">
+        <img src="{{ url_for('static', filename='img/pepe.png') }}" class="card-img-top rounded mx-auto d-block" style="width: 60%; height: auto;">
       </div>
     </div>
-    <div class="row mt-5 ">
-      <div class="col-12 text-center">
-        <h2 class="display-6">Consejos para una vida saludable</h2>
-        <p class="lead">Mantén tu salud en su mejor estado con estos simples consejos de nutrición:</p>
-        <div class="row">
-          <div class="col-md-4">
-            <h5>1. Mantén una dieta equilibrada</h5>
-            <p>Consume una variedad de alimentos, incluyendo frutas, verduras, proteínas magras y carbohidratos complejos.</p>
-          </div>
-          <div class="col-md-4">
-            <h5>2. Bebe suficiente agua</h5>
-            <p>El agua es esencial para la digestión, la absorción de nutrientes y la regulación de la temperatura corporal.</p>
-          </div>
-          <div class="col-md-4">
-            <h5>3. Realiza actividad física regularmente</h5>
-            <p>El ejercicio ayuda a mantener un peso saludable y mejora tu bienestar general.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-  </div>
-  
-    
 
   </div>
+
+
+  <div class="row mt-5">
+    <div class="col-12 text-center">
+    <h2 class="display-6 mt-5">Consejos para una vida saludable</h2>
+ <p class="lead mb-5">Mantén tu salud en su mejor estado con estos simples consejos de nutricion</p>
+
+      <div class="row">
+        <div class="col-md-4">
+          <h5>1. Mantén una dieta equilibrada</h5>
+          <p>Consume una variedad de alimentos, incluyendo frutas, verduras, proteínas magras y carbohidratos complejos.</p>
+        </div>
+        <div class="col-md-4">
+          <h5>2. Bebe suficiente agua</h5>
+          <p>El agua es esencial para la digestión, la absorción de nutrientes y la regulacion de la temperatura corporal.</p>
+        </div>
+        <div class="col-md-4">
+          <h5>3. Realiza actividad fisica regularmente</h5>
+          <p>El ejercicio ayuda a mantener un peso saludable y mejora tu bienestar general.</p>
+        </div>
+      </div>
+
+      <div class="mt-5 p-3 bg-light rounded shadow-sm text-center mx-auto" style="max-width: 500px;">
+        <h5>pregunta saludable del dia</h5>
+        <p>¿Cual de estos alimentos tiene mas proteinas?</p>
+        <div class="d-flex justify-content-center gap-2">
+          <button class="btn btn-outline-secondary btn-sm">Manzana</button>
+          <button class="btn btn-success btn-sm">Pollo </button>
+          <button class="btn btn-outline-secondary btn-sm">Pan blanco</button>
+      
+
+    </div>
+  </div>
+
 </div>
+
+
+<footer class="text-center border-top py-3 bg-light mt-5">
+  <p class="text-muted small mb-0">
+    “Dios no te pide ser perfecto, solo constante.” 
+  </p>
+</footer>
 {% endblock %}
