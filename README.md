@@ -43,7 +43,48 @@ El trabajo se desarrolló en dos fases:
 2. Diseño y Aplicación de Encuesta: Se elaboró una encuesta en Google Forms para recopilar información sobre el perfil y las preferencias de los usuarios.
 
 - Formulario de la encuesta: https://docs.google.com/forms/d/e/1FAIpQLSfWheQuMPDlAqurAm9Bd2FK87MN6vA4LZjuF4nUdxu_A0a2YA/viewform?usp=dialog
+--- 
+
+## Análisis de APIs de Nutrición
+
+### Nutritionix API
+- **Funcionalidades**: Búsqueda de alimentos, datos nutricionales, escaneo de códigos de barras, registro de comidas.
+- **Experiencia para desarrolladores**: Documentación clara, SDKs disponibles, fácil integración.
+- **Modelo**: Freemium (uso limitado gratuito, planes de pago).
+- **Fortalezas**: Base de datos extensa, incluye marcas comerciales y restaurantes.
+- **Debilidades**: Algunas funciones avanzadas requieren suscripción.
+- **Innovación**: Reconocimiento de voz para registrar alimentos.
+
 ---
+
+### Edamam API
+- **Funcionalidades**: Análisis nutricional de recetas, búsqueda de alimentos, etiquetas dietéticas (vegano, sin gluten, etc.).
+- **Experiencia para desarrolladores**: API REST bien documentada, ejemplos de uso.
+- **Modelo**: Freemium con planes escalables.
+- **Fortalezas**: Ideal para apps de recetas y planificación de comidas.
+- **Debilidades**: Límite de llamadas en el plan gratuito.
+- **Innovación**: Etiquetado inteligente de recetas según perfil nutricional.
+
+---
+
+### Open Food Facts API
+- **Funcionalidades**: Acceso a base de datos colaborativa de productos alimenticios con información nutricional y ecológica.
+- **Experiencia para desarrolladores**: Gratuita y abierta, con comunidad activa.
+- **Modelo**: Open Source (gratuita).
+- **Fortalezas**: Transparencia, datos comunitarios, multilingüe.
+- **Debilidades**: Calidad de datos variable, depende de contribuciones.
+- **Innovación**: Integración con apps educativas y escaneo de productos.
+
+---
+
+### Tabla Comparativa de APIs
+
+| API               | Modelo     | Base de Datos           | Funciones Clave                  | Ideal para...                  |
+|------------------|------------|--------------------------|----------------------------------|--------------------------------|
+| Nutritionix       | Freemium   | Comercial y restaurantes | Escaneo, registro, voz           | Apps de seguimiento de dieta   |
+| Edamam            | Freemium   | Recetas y alimentos      | Análisis nutricional, etiquetas  | Apps de recetas y salud        |
+| Open Food Facts   | Gratuita   | Colaborativa             | Escaneo, nutrición, ecológico    | Proyectos educativos y abiertos |
+
 ## Análisis de Aplicaciones
 - MyFitnessPal
 Funcionalidades: Registro detallado de alimentos, calorías y macronutrientes. Base de datos amplia y escaneo de códigos de barras.
