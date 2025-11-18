@@ -75,6 +75,16 @@ El trabajo se desarrolló en dos fases:
 - **Debilidades**: Calidad de datos variable, depende de contribuciones.
 - **Innovación**: Integración con apps educativas y escaneo de productos.
 
+
+---
+###USDA API (United States Department of Agriculture)
+
+- ** Funcionalidades: Acceso a una extensa base de datos de alimentos con información nutricional detallada (calorías, macronutrientes, vitaminas, minerales, etc.), búsqueda de alimentos por nombre o código.
+- ** Experiencia para desarrolladores: Documentación extensa y gratuita, aunque algo técnica en algunos casos. Acceso a datos históricos y a la base de datos de alimentos más completa de los EE. UU.
+- ** Modelo: Gratuita.
+- ** Fortalezas: Base de datos muy completa y precisa, respaldo de un organismo oficial.
+- ** Debilidades: Solo disponible en inglés, la interfaz no es tan amigable como otras APIs más modernas.
+- ** Innovación: Conjunto de datos históricos y opciones avanzadas para análisis nutricionales detallados.
 ---
 
 ### Tabla Comparativa de APIs
@@ -84,34 +94,8 @@ El trabajo se desarrolló en dos fases:
 | Nutritionix       | Freemium   | Comercial y restaurantes | Escaneo, registro, voz           | Apps de seguimiento de dieta   |
 | Edamam            | Freemium   | Recetas y alimentos      | Análisis nutricional, etiquetas  | Apps de recetas y salud        |
 | Open Food Facts   | Gratuita   | Colaborativa             | Escaneo, nutrición, ecológico    | Proyectos educativos y abiertos |
+| USDA              |Gratuita    |Oficial y gubernamental   | Datos nutricionales detallados   | Apps de nutrición y análisis profundo |
 
-## Análisis de Aplicaciones
-- MyFitnessPal
-Funcionalidades: Registro detallado de alimentos, calorías y macronutrientes. Base de datos amplia y escaneo de códigos de barras.
-Experiencia: Interfaz sencilla y rápida, aunque técnica para principiantes.
-Modelo: Freemium (funciones básicas gratis, versión Premium con estadísticas avanzadas).
-Fortalezas: Precisión numérica, base de datos internacional.
-Debilidades: Requiere tiempo para registrar comidas, funciones Premium de pago.
-Innovación: Integración con relojes inteligentes y metas calóricas personalizadas.
-- Lifesum
-Funcionalidades: Planes de alimentación personalizados, registro de comidas, recetas saludables.
-Experiencia: Interfaz moderna, visual y atractiva.
-Modelo: Freemium (versiones gratis y premium).
-Fortalezas: Diseño intuitivo, enfoque motivador.
-Debilidades: Algunas funciones de pago, requiere conexión a internet.
-Innovación: Gamificación con logros, rachas y niveles.
-- Yuka
-Funcionalidades: Escaneo de productos alimenticios y evaluación de calidad nutricional.
-Experiencia: Sencilla e inmediata, ideal para supermercados.
-Modelo: Gratuita con versión Premium.
-Fortalezas: Uso simple y educativo.
-Debilidades: No registra comidas, limitado a productos envasados.
-Innovación: Calificación visual tipo semáforo (Nutriscore).
-
----
-
-## Tabla Comparativa de Aplicaciones
-<img width="507" height="462" alt="image" src="https://github.com/user-attachments/assets/98b9ae91-d517-4aa2-b85e-12bd06bf25b5" />
 
 
 --- 
