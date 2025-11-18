@@ -77,7 +77,7 @@ El trabajo se desarrolló en dos fases:
 
 
 ---
-###USDA API (United States Department of Agriculture)
+### USDA API (United States Department of Agriculture)
 
 - ** Funcionalidades: Acceso a una extensa base de datos de alimentos con información nutricional detallada (calorías, macronutrientes, vitaminas, minerales, etc.), búsqueda de alimentos por nombre o código.
 - ** Experiencia para desarrolladores: Documentación extensa y gratuita, aunque algo técnica en algunos casos. Acceso a datos históricos y a la base de datos de alimentos más completa de los EE. UU.
