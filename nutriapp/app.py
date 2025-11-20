@@ -82,5 +82,69 @@ def acerca():
 def recetas():
     return render_template('recetas.html')
 
+
+
+@app.route('/tmb', methods=['GET', 'POST'])
+def tmb():
+    resultado = None
+    if request.method == 'POST':
+        peso = float(request.form['peso'])
+        altura = float(request.form['altura'])
+        edad = float(request.form['edad'])
+        sexo = request.form['sexo']
+
+        if sexo == 'hombre':
+            resultado = 88.36 + (13.4 * peso) + (4.8 * altura) - (5.7 * edad)
+        else:
+            resultado = 447.6 + (9.2 * peso) + (3.1 * altura) - (4.3 * edad)
+
+    return render_template('tmb.html', resultado=resultado)
+
+
+@app.route('/gasto-calorico', methods=['GET', 'POST'])
+def gasto_calorico():
+    resultado = None
+    if request.method == 'POST':
+        tmb = float(request.form['tmb'])
+        factor = float(request.form['factor'])
+        resultado = tmb * factor
+
+    return render_template('gasto_calorico.html', resultado=resultado)
+
+
+@app.route('/peso-ideal', methods=['GET', 'POST'])
+def peso_ideal():
+    resultado = None
+    if request.method == 'POST':
+        altura = float(request.form['altura']) / 100
+        sexo = request.form['sexo']
+
+        if sexo == 'hombre':
+            resultado = 22 * (altura ** 2)
+        else:
+            resultado = 21 * (altura ** 2)
+
+    return render_template('peso_ideal.html', resultado=resultado)
+
+
+@app.route('/macros', methods=['GET', 'POST'])
+def macros():
+    resultado = None
+    if request.method == 'POST':
+        calorias = float(request.form['calorias'])
+        
+        prote = calorias * 0.30 / 4
+        carbs = calorias * 0.40 / 4
+        grasas = calorias * 0.30 / 9
+
+        resultado = {
+            'proteinas': round(prote, 1),
+            'carbohidratos': round(carbs, 1),
+            'grasas': round(grasas, 1)
+        }
+
+    return render_template('macros.html', resultado=resultado)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
