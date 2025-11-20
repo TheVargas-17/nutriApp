@@ -1,21 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de Usuario</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"></head>
-
-</head>
-<body class="bg-light">
-
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-
             <div class="card shadow-lg">
                 <div class="card-header bg-primary text-white text-center">
                     <h3>Perfil de {{ usuario.nombre }} {{ usuario.apellidos }}</h3>
@@ -23,7 +11,6 @@
                 <div class="card-body">
                     <p><strong>Correo:</strong> {{ usuario.correo }}</p>
                     <p><strong>Fecha de Nacimiento:</strong> {{ usuario.fecha_nacimiento }}</p>
-                    <p><strong>Edad:</strong> {{ usuario.edad }} años</p>
                     <p><strong>Sexo:</strong> {{ usuario.sexo }}</p>
                     <p><strong>Peso:</strong> {{ usuario.peso }} kg</p>
                     <p><strong>Altura:</strong> {{ usuario.altura }} cm</p>
@@ -34,20 +21,11 @@
                     <p><strong>Dietas:</strong> {{ ', '.join(usuario.dietas) if usuario.dietas else 'Ninguna' }}</p>
                     <p><strong>Alimentos que no le gustan:</strong> {{ usuario.alimentos_no_gustan }}</p>
                     <p><strong>Nivel de Experiencia en Cocina:</strong> {{ usuario.experiencia_cocina }}</p>
-
                     <a href="/" class="btn btn-outline-secondary mt-3">Cerrar sesión</a>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script></body>
-</body>
-</html>
-
-
-
 
 {% endblock %}

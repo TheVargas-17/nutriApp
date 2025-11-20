@@ -1,19 +1,22 @@
+from flask import Flask, render_template, request, redirect, url_for, session
 
-from datetime import datetime
-
-from flask import Flask, render_template,request,redirect
 app = Flask(__name__)
+app.secret_key = 'mi_clave_secreta'  
 
 
-usuarios = {}
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
     if request.method == 'POST':
+       
+       
         nombre = request.form['nombre']
         apellidos = request.form['apellidos']
         correo = request.form['correo']
-        password = request.form['password']
         fecha_nacimiento = request.form['fecha_nacimiento']
         sexo = request.form['sexo']
         peso = request.form['peso']
@@ -24,16 +27,12 @@ def registro():
         intolerancias = request.form.getlist('intolerancias')
         dietas = request.form.getlist('dietas')
         alimentos_no_gustan = request.form['alimentos_no_gustan']
-        nivel_cocina = request.form['nivel_cocina']
+        experiencia_cocina = request.form['experiencia_cocina']
 
-        if correo in usuarios:
-            return render_template('registro.html', error="El correo ya está registrado.")
-        
-        usuarios[correo] = {
+        session['usuario'] = {
             'nombre': nombre,
             'apellidos': apellidos,
             'correo': correo,
-            'password': password,
             'fecha_nacimiento': fecha_nacimiento,
             'sexo': sexo,
             'peso': peso,
@@ -44,16 +43,23 @@ def registro():
             'intolerancias': intolerancias,
             'dietas': dietas,
             'alimentos_no_gustan': alimentos_no_gustan,
-            'nivel_cocina': nivel_cocina
+            'experiencia_cocina': experiencia_cocina
         }
 
-        return redirect('/') 
+        return redirect(url_for('perfil'))
 
     return render_template('registro.html')
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+
+
+@app.route('/perfil')
+def perfil():
+    usuario = session.get('usuario')
+    if not usuario:
+        return redirect(url_for('registro'))
+    return render_template('perfil.html', usuario=usuario)
+
+
 
 @app.route('/planes')
 def planes():
@@ -63,16 +69,18 @@ def planes():
 def alimentos():
     return render_template('alimentos.html')
 
-@app.route('/imc')
-def imc():
-    return render_template('imc.html')
+@app.route('/cal')
+def calculadoras():
+    return render_template('calculadoras.html')
 
 @app.route('/acerca')
 def acerca():
     return render_template('acerca.html')
-@app.route('/perfil')
-def perfil():
-    return render_template('perfil.html')
+
+
+@app.route('/recetas')
+def recetas():
+    return render_template('recetas.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
