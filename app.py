@@ -146,5 +146,15 @@ def macros():
     return render_template('macros.html', resultado=resultado)
 
 
+@app.route('/respuesta_correcta')
+def respuesta_correcta():
+    mensaje = "exacto my bro el pollo es el que tiene mas proteinas, eres todo un sabiondo ades ser amigo del Leonardo Vargas"
+    return render_template('respuesta.html', mensaje=mensaje)
+
+@app.route('/respuesta_incorrecta')
+def respuesta_incorrecta():
+    mensaje = "no le atinaste pa."
+    return render_template('respuesta.html', mensaje=mensaje)
+
 if __name__ == '__main__':
     app.run(debug=True)

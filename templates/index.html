@@ -4,13 +4,13 @@
   <div class="row align-items-center">
 
     <div class="col-md-7 text-center mb-4 mb-md-0">
-      <h1 class="mb-4 display-4 text-primary">Bienvenido a la NutriApp</h1>
+      <h1 class="mb-4 display-4 text-primary">Bienvenido a La Tragona<em>pp</em></h1>
       <p class="lead mb-4 text-secondary">
-       la mejor de todas las NutriApps Tu guia para una alimentación saludable. Explora planes, calcula tu IMC y descubre información sobre alimentos.
+       la mejor de todas las NutriApps, hace lo mismo que las otras pero fue hecha con el corazon.
       </p>
 
       <div class="mt-5 text-center">
-        <a href="/planes" class="btn btn-primary btn-lg me-2">Ver Metas disponibles</a>
+        <a href="/planes" class="btn btn-primary btn-lg me-2">Metas</a>
         <a href="/alimentos" class="btn btn-info btn-lg">Consultar Alimentos</a>
       </div>
     </div>
@@ -45,15 +45,15 @@
           <p>El ejercicio ayuda a mantener un peso saludable y mejora tu bienestar general.</p>
         </div>
       </div>
-
-      <div class="mt-5 p-3 bg-light rounded shadow-sm text-center mx-auto" style="max-width: 500px;">
-        <h5>pregunta saludable del dia</h5>
-        <p>¿Cual de estos alimentos tiene mas proteinas?</p>
-        <div class="d-flex justify-content-center gap-2">
-   <button class="btn btn-outline-secondary btn-sm">Manzana</button>
-<button class="btn btn-primary btn-sm">Pollo</button>
-<button class="btn btn-outline-secondary btn-sm">Pan blanco</button>
-
+<div class="mt-5 p-3 bg-light rounded shadow-sm text-center mx-auto" style="max-width: 500px;">
+  <h5>Pregunta saludable del día</h5>
+  <p>¿Cuál de estos alimentos tiene más proteínas?</p>
+  <div class="d-flex justify-content-center gap-2">
+    <a href="{{ url_for('respuesta_incorrecta') }}" class="btn btn-outline-secondary btn-sm">Manzana</a>
+    <a href="{{ url_for('respuesta_correcta') }}" class="btn btn-outline-secondary btn-sm">Pollo</a>
+    <a href="{{ url_for('respuesta_incorrecta') }}" class="btn btn-outline-secondary btn-sm">Pan blanco</a>
+  </div>
+</div>
 
     </div>
   </div>
