@@ -86,9 +86,9 @@ def planes():
 def alimentos():
     return render_template('alimentos.html')
 
-@app.route('/cal')
-def calculadoras():
-    return render_template('calculadoras.html')
+@app.route('/imc')
+def imc():
+    return render_template('imc.html')
 
 @app.route('/acerca')
 def acerca():
