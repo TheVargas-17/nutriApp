@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Detalles del alimento{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow-lg p-4 mt-4">
+      {% if comida %}
+        <h2 class="text-primary fw-bold">{{ comida.description }}</h2>
+        <p class="text-muted">ID: <span class="fw-semibold">{{ comida.fdcId }}</span></p>
+
+        <p><strong>Marca:</strong> {{ comida.brandOwner or "No especificada" }}</p>
+
+        <hr>
+
+        <h4 class="fw-bold">Información Nutricional</h4>
+        <table class="table table-striped mt-3">
+          <thead class="table-primary">
+            <tr>
+              <th>Nutriente</th>
+              <th>Cantidad</th>
+              <th>Unidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for n in comida.foodNutrients %}
+            <tr>
+              <td>{{ n.nutrient.name }}</td>
+              <td>{{ n.amount }}</td>
+              <td>{{ n.nutrient.unitName }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="text-danger">No se pudo cargar la información.</p>
+      {% endif %}
+
+      <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3">← Volver</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
