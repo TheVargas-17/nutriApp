@@ -1,11 +1,25 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import requests
+from flask_mysqldb import MySQL
+from workzeug.security import generate_pasword_hash
+import re
 
 app = Flask(__name__)
 app.secret_key = 'mi_clave_secreta'
 
 API_BASE = "https://api.nal.usda.gov/fdc/v1"
 API_KEY = "LbfNAj8Br4T9LIC7jz5YlLs3pfvDHEDHX4LEDBIO"
+
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_BD'] = 'prueba'
+
+mysql = MySQL(app)
+
+def create_tabla():
+    try:
+        cursor=mysql.connection.cursor()
 
 @app.route('/buscar', methods=['POST'])
 def buscar():
