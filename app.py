@@ -137,7 +137,7 @@ def tmb():
 @app.route('/gasto-calorico', methods=['GET', 'POST'])
 def gasto_calorico():
     resultado = None
-    if request.method == 'POST':   # ← CORREGIDO
+    if request.method == 'POST':  
         tmb_val = float(request.form['tmb'])
         factor = float(request.form['factor'])
         resultado = tmb_val * factor
@@ -157,7 +157,7 @@ def peso_ideal():
 @app.route('/macros', methods=['GET', 'POST'])
 def macros():
     resultado = None
-    if request.method == 'POST':   # ← CORREGIDO
+    if request.method == 'POST':   
         calorias = float(request.form['calorias'])
         prote = calorias * 0.30 / 4
         carbs = calorias * 0.40 / 4
@@ -181,7 +181,6 @@ def respuesta_incorrecta():
     return render_template('respuesta.html', mensaje=mensaje)
 
 
-# --------------------------------------------------------
 
 if __name__ == '__main__':
     app.run(debug=True)
