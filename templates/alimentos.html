@@ -5,12 +5,12 @@
 
 <div class="row mt-4">
 
-      <form method="POST" action="{{ url_for('buscar') }}" class="mt-4">
-  <label class="form-label fw-semibold">Buscar alimento por ID:</label>
-  <input type="text" name="fdc_id" class="form-control" placeholder="Ejemplo: 1102654">
-  <button class="btn btn-primary w-100 mt-3 fw-bold">Consultar alimento</button>
-
+     <form method="POST" action="{{ url_for('buscar') }}" class="mt-4">
+  <label class="form-label fw-semibold">Escribe el nombre del alimento</label>
+  <input type="text" name="nombre" class="form-control" placeholder="Ejemplo: apple, chicken, rice...">
+  <button class="btn btn-success w-100 mt-3 fw-bold">Buscar</button>
 </form>
+
 <div class="row mt-4"></div>
 
   <div class="col-md-4 mb-3">

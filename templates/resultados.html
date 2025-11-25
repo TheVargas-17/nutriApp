@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+  <h3 class="mb-3">Resultados para: "{{ busqueda }}"</h3>
+
+  {% if resultados %}
+    <ul class="list-group">
+      {% for r in resultados %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          
+          <strong>
+            {{ r.description or r.lowercaseDescription or "Sin descripción" }}
+          </strong>
+
+          <a href="{{ url_for('food', fdc_id=r.fdcId) }}" class="btn btn-primary btn-sm">
+            Ver detalles
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No se encontraron resultados.</p>
+  {% endif %}
+
+  <a href="{{ url_for('alimentos') }}" class="btn btn-secondary mt-3">← Volver</a>
+</div>
+
+{% endblock %}

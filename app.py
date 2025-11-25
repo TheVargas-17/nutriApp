@@ -1,8 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import requests
-from flask_mysqldb import MySQL
-from workzeug.security import generate_pasword_hash
-import re
 
 app = Flask(__name__)
 app.secret_key = 'mi_clave_secreta'
@@ -10,107 +7,117 @@ app.secret_key = 'mi_clave_secreta'
 API_BASE = "https://api.nal.usda.gov/fdc/v1"
 API_KEY = "LbfNAj8Br4T9LIC7jz5YlLs3pfvDHEDHX4LEDBIO"
 
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_BD'] = 'prueba'
-
-mysql = MySQL(app)
-
-def create_tabla():
-    try:
-        cursor=mysql.connection.cursor()
 
 @app.route('/buscar', methods=['POST'])
 def buscar():
-    fdc_id = request.form.get('fdc_id', '').strip()
-    if not fdc_id.isdigit():
-        flash("Debes ingresar un ID válido.", "error")
-        return redirect(url_for('index'))
-    return redirect(url_for('food', fdc_id=int(fdc_id)))
+    alimento = request.form.get('nombre', '').strip()
+
+    if not alimento:
+        flash("Ingresa el nombre del alimento.", "error")
+        return redirect(url_for('alimentos'))
+
+    try:
+        resp = requests.get(
+            f"{API_BASE}/foods/search",
+            params={"api_key": API_KEY, "query": alimento, "pageSize": 20}
+        )
+
+        if resp.status_code == 200:
+            data = resp.json()
+            resultados = data.get("foods", [])
+
+            return render_template(
+                "resultados.html",
+                resultados=resultados,
+                busqueda=alimento
+            )
+
+        flash("No se encontraron alimentos.", "error")
+        return redirect(url_for('alimentos'))
+
+    except Exception as e:
+        print("ERROR:", e)
+        flash("Error al conectar con la API.", "error")
+        return redirect(url_for('alimentos'))
+
 
 @app.route('/food/<int:fdc_id>')
 def food(fdc_id):
     try:
-        resp = requests.get(f"{API_BASE}/food/{fdc_id}",
-                            params={"api_key": API_KEY})
+        resp = requests.get(
+            f"{API_BASE}/foods/{fdc_id}",
+            params={"api_key": API_KEY}
+        )
+
         if resp.status_code == 200:
             comida = resp.json()
             return render_template("food.html", comida=comida)
-        flash("No se encontró ese ID.", "error")
-        return redirect(url_for('index'))
-    except:
+
+        flash("No se pudo obtener la información del alimento.", "error")
+        return redirect(url_for('alimentos'))
+
+    except Exception as e:
+        print("ERROR:", e)
         flash("Error al conectar con la API.", "error")
-        return redirect(url_for('index'))
+        return redirect(url_for('alimentos'))
 
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
+
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
     if request.method == 'POST':
-        nombre = request.form['nombre']
-        apellidos = request.form['apellidos']
-        correo = request.form['correo']
-        fecha_nacimiento = request.form['fecha_nacimiento']
-        sexo = request.form['sexo']
-        peso = request.form['peso']
-        altura = request.form['altura']
-        actividad_fisica = request.form['actividad_fisica']
-        objetivos = request.form['objetivos']
-        alergias = request.form.getlist('alergias')
-        intolerancias = request.form.getlist('intolerancias')
-        dietas = request.form.getlist('dietas')
-        alimentos_no_gustan = request.form['alimentos_no_gustan']
-        experiencia_cocina = request.form['experiencia_cocina']
-
         session['usuario'] = {
-            'nombre': nombre,
-            'apellidos': apellidos,
-            'correo': correo,
-            'fecha_nacimiento': fecha_nacimiento,
-            'sexo': sexo,
-            'peso': peso,
-            'altura': altura,
-            'actividad_fisica': actividad_fisica,
-            'objetivos': objetivos,
-            'alergias': alergias,
-            'intolerancias': intolerancias,
-            'dietas': dietas,
-            'alimentos_no_gustan': alimentos_no_gustan,
-            'experiencia_cocina': experiencia_cocina
+            key: request.form.get(key)
+            for key in [
+                'nombre', 'apellidos', 'correo', 'fecha_nacimiento', 'sexo',
+                'peso', 'altura', 'actividad_fisica', 'objetivos',
+                'alimentos_no_gustan', 'experiencia_cocina'
+            ]
         }
+        session['usuario']['alergias'] = request.form.getlist('alergias')
+        session['usuario']['intolerancias'] = request.form.getlist('intolerancias')
+        session['usuario']['dietas'] = request.form.getlist('dietas')
+
         return redirect(url_for('perfil'))
+
     return render_template('registro.html')
+
 
 @app.route('/perfil')
 def perfil():
-    usuario = session.get('usuario')
-    if not usuario:
+    if not session.get('usuario'):
         return redirect(url_for('registro'))
-    return render_template('perfil.html', usuario=usuario)
+    return render_template('perfil.html', usuario=session['usuario'])
+
 
 @app.route('/planes')
 def planes():
     return render_template('planes.html')
 
+
 @app.route('/alimentos')
 def alimentos():
     return render_template('alimentos.html')
+
 
 @app.route('/imc')
 def imc():
     return render_template('imc.html')
 
+
 @app.route('/acerca')
 def acerca():
     return render_template('acerca.html')
 
+
 @app.route('/recetas')
 def recetas():
     return render_template('recetas.html')
+
 
 @app.route('/tmb', methods=['GET', 'POST'])
 def tmb():
@@ -126,14 +133,16 @@ def tmb():
             resultado = 447.6 + (9.2 * peso) + (3.1 * altura) - (4.3 * edad)
     return render_template('tmb.html', resultado=resultado)
 
+
 @app.route('/gasto-calorico', methods=['GET', 'POST'])
 def gasto_calorico():
     resultado = None
-    if request.method == 'POST':
+    if request.method == 'POST':   # ← CORREGIDO
         tmb_val = float(request.form['tmb'])
         factor = float(request.form['factor'])
         resultado = tmb_val * factor
     return render_template('gasto_calorico.html', resultado=resultado)
+
 
 @app.route('/peso-ideal', methods=['GET', 'POST'])
 def peso_ideal():
@@ -141,16 +150,14 @@ def peso_ideal():
     if request.method == 'POST':
         altura_m = float(request.form['altura']) / 100
         sexo = request.form['sexo']
-        if sexo == 'hombre':
-            resultado = 22 * (altura_m ** 2)
-        else:
-            resultado = 21 * (altura_m ** 2)
+        resultado = (22 if sexo == 'hombre' else 21) * (altura_m ** 2)
     return render_template('peso_ideal.html', resultado=resultado)
+
 
 @app.route('/macros', methods=['GET', 'POST'])
 def macros():
     resultado = None
-    if request.method == 'POST':
+    if request.method == 'POST':   # ← CORREGIDO
         calorias = float(request.form['calorias'])
         prote = calorias * 0.30 / 4
         carbs = calorias * 0.40 / 4
@@ -162,6 +169,7 @@ def macros():
         }
     return render_template('macros.html', resultado=resultado)
 
+
 @app.route('/respuesta_correcta')
 def respuesta_correcta():
     mensaje = "exacto my bro el pollo es el que tiene mas proteinas, eres todo un sabiondo ades ser amigo del Leonardo Vargas"
@@ -171,6 +179,9 @@ def respuesta_correcta():
 def respuesta_incorrecta():
     mensaje = "no le atinaste pa."
     return render_template('respuesta.html', mensaje=mensaje)
+
+
+# --------------------------------------------------------
 
 if __name__ == '__main__':
     app.run(debug=True)
