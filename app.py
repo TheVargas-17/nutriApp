@@ -87,6 +87,38 @@ def registro():
     return render_template('registro.html')
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        correo = request.form.get('correo')
+        password = request.form.get('password')
+
+
+        USUARIO_VALIDO = "usuario@correo.com"
+        PASSWORD_VALIDO = "1234"
+
+        if correo == USUARIO_VALIDO and password == PASSWORD_VALIDO:
+            session['usuario'] = {
+                'correo': correo,
+                'nombre': 'Usuario Demo'
+            }
+            flash("Inicio de sesión exitoso.", "success")
+            return redirect(url_for('perfil'))
+
+        flash("Correo o contraseña incorrectos.", "error")
+        return redirect(url_for('login'))
+
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash("Sesión cerrada.", "info")
+    return redirect(url_for('index'))
+
+
+
+
 @app.route('/perfil')
 def perfil():
     if not session.get('usuario'):
@@ -168,6 +200,68 @@ def macros():
             'grasas': round(grasas, 1)
         }
     return render_template('macros.html', resultado=resultado)
+@app.route('/recetas-simple', methods=['GET', 'POST'])
+def recetas_simple():
+    resultados = []
+    total = {"kcal": 0, "prote": 0, "carbs": 0, "grasas": 0}
+
+    if request.method == 'POST':
+        nombres = request.form.getlist('nombre')
+        gramos_list = request.form.getlist('gramos')
+
+        for i in range(len(nombres)):
+            nombre = nombres[i]
+            gramos = float(gramos_list[i]) if gramos_list[i] else 0
+
+        
+            busqueda = requests.get(
+                f"{API_BASE}/foods/search",
+                params={"api_key": API_KEY, "query": nombre, "pageSize": 1}
+            ).json()
+
+            if not busqueda.get("foods"):
+                continue
+
+            fdc_id = busqueda["foods"][0]["fdcId"]
+
+            detalle = requests.get(
+                f"{API_BASE}/foods/{fdc_id}",
+                params={"api_key": API_KEY}
+            ).json()
+
+            kcal = prote = carbs = grasas = 0
+
+            for n in detalle["foodNutrients"]:
+                name = n["nutrientName"].lower()
+                if "energy" in name and n["unitName"] == "kcal":
+                    kcal = n["value"]
+                elif "protein" in name:
+                    prote = n["value"]
+                elif "carbohydrate" in name:
+                    carbs = n["value"]
+                elif "fat" in name and "total" in name:
+                    grasas = n["value"]
+
+            factor = gramos / 100
+
+            datos = {
+                "nombre": detalle["description"],
+                "gramos": gramos,
+                "kcal": kcal * factor,
+                "prote": prote * factor,
+                "carbs": carbs * factor,
+                "grasas": grasas * factor
+            }
+
+            resultados.append(datos)
+
+            total["kcal"] += datos["kcal"]
+            total["prote"] += datos["prote"]
+            total["carbs"] += datos["carbs"]
+            total["grasas"] += datos["grasas"]
+
+    return render_template("recetas_simple.html", resultados=resultados, total=total)
+
 
 
 @app.route('/respuesta_correcta')

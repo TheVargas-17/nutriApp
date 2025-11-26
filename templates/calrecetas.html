@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Recetas Simples{% endblock %}
+
+{% block content %}
+
+<h2 class="text-center mb-3">Calculadora simple de recetas (API USDA)</h2>
+
+<form method="POST">
+    <div id="lista">
+
+        <div class="row mb-3 ingrediente">
+            <div class="col-md-6">
+                <label>Alimento</label>
+                <input type="text" name="nombre" class="form-control" placeholder="Ej: pollo" required>
+            </div>
+
+            <div class="col-md-3">
+                <label>Gramos usados</label>
+                <input type="number" name="gramos" class="form-control" required>
+            </div>
+        </div>
+
+    </div>
+
+    <button type="button" class="btn btn-secondary mb-3" onclick="add()">+ Ingrediente</button>
+    <button class="btn btn-primary w-100" type="submit">Calcular</button>
+</form>
+
+<hr>
+
+{% if resultados %}
+<h4>Resultados por ingrediente:</h4>
+<ul class="list-group mb-3">
+    {% for r in resultados %}
+    <li class="list-group-item">
+        <strong>{{ r.nombre }}</strong> ({{ r.gramos }} g):  
+        {{ r.kcal|round(1) }} kcal — 
+        {{ r.prote|round(1) }} g prot — 
+        {{ r.carbs|round(1) }} g carbs — 
+        {{ r.grasas|round(1) }} g grasas
+    </li>
+    {% endfor %}
+</ul>
+
+<h4>Total de la receta:</h4>
+<ul class="list-group">
+    <li class="list-group-item"><strong>Calorías:</strong> {{ total.kcal|round(1) }}</li>
+    <li class="list-group-item"><strong>Proteínas:</strong> {{ total.prote|round(1) }} g</li>
+    <li class="list-group-item"><strong>Carbohidratos:</strong> {{ total.carbs|round(1) }} g</li>
+    <li class="list-group-item"><strong>Grasas:</strong> {{ total.grasas|round(1) }} g</li>
+</ul>
+{% endif %}
+
+<script>
+function add() {
+    const div = document.querySelector(".ingrediente").cloneNode(true);
+    div.querySelectorAll("input").forEach(i => i.value = "");
+    document.getElementById("lista").appendChild(div);
+}
+</script>
+
+{% endblock %}

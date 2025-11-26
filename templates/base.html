@@ -41,15 +41,31 @@
                         <li><a class="dropdown-item" href="/tmb">TMB</a></li>
                         <li><a class="dropdown-item" href="/gasto-calorico">Gasto Calórico Total</a></li>
                         <li><a class="dropdown-item" href="/peso-ideal">Peso Ideal</a></li>
-                        <li><a class="dropdown-item" href="/macros">Macronutrientes</a></li>
 
+                        {% if session.usuario %}
+                        <li><a class="dropdown-item" href="/macros">Macronutrientes</a></li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Iniciar sesión</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/registro">Registrarme</a>
+                        </li>
+                    {% endif %}
+                    
                     </ul>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/recetas">Recetas</a>
-                </li>
+                
 {% if session.usuario %}
+<li class="nav-item">
+    <a class="nav-link" href="/calrecetas">Calculadora de Recetas</a>
+</li>
+
+
+<li class="nav-item">
+    <a class="nav-link" href="/recetas">Recetas</a>
+</li>
 
     <li class="nav-item">
         <a class="nav-link" href="/perfil">Perfil</a>
@@ -60,12 +76,14 @@
     </li>
 
 {% else %}
-
+    <li class="nav-item">
+        <a class="nav-link" href="/login">Iniciar sesión</a>
+    </li>
     <li class="nav-item">
         <a class="nav-link" href="/registro">Registrarme</a>
     </li>
-
 {% endif %}
+
 
                 
                 <li class="nav-item">
