@@ -15,6 +15,7 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'bsdnutri'
 
+
 mysql = MySQL(app)
 
 def crear_tablas():
@@ -139,7 +140,6 @@ def registrar_usuario_db(form):
     alimentos_no_gustan = form['alimentos_no_gustan']
     experiencia_cocina = form['experiencia_cocina']
 
-    # Multi-selección guardada como JSON
     alergias = json.dumps(form.getlist('alergias'), ensure_ascii=False)
     intolerancias = json.dumps(form.getlist('intolerancias'), ensure_ascii=False)
     dietas = json.dumps(form.getlist('dietas'), ensure_ascii=False)
