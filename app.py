@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import requests
+from flask_mysqldb import MySQL
+from werkzeug.security import generate_password_hash, check_password_hash
+import json
 
 app = Flask(__name__)
 app.secret_key = 'mi_clave_secreta'
@@ -7,108 +10,182 @@ app.secret_key = 'mi_clave_secreta'
 API_BASE = "https://api.nal.usda.gov/fdc/v1"
 API_KEY = "LbfNAj8Br4T9LIC7jz5YlLs3pfvDHEDHX4LEDBIO"
 
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'bsdnutri'
 
-@app.route('/buscar', methods=['POST'])
-def buscar():
-    alimento = request.form.get('nombre', '').strip()
+mysql = MySQL(app)
 
-    if not alimento:
-        flash("Ingresa el nombre del alimento.", "error")
-        return redirect(url_for('alimentos'))
-
-    try:
-        resp = requests.get(
-            f"{API_BASE}/foods/search",
-            params={"api_key": API_KEY, "query": alimento, "pageSize": 20}
+def crear_tablas():
+    cursor = mysql.connection.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS usuarios (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            nombre VARCHAR(100) NOT NULL,
+            apellidos VARCHAR(100) NOT NULL,
+            correo VARCHAR(150) UNIQUE NOT NULL,
+            password TEXT,
+            fecha_nacimiento DATE,
+            sexo VARCHAR(20),
+            peso FLOAT,
+            altura FLOAT,
+            actividad_fisica VARCHAR(50),
+            objetivos VARCHAR(255),
+            alergias TEXT,
+            intolerancias TEXT,
+            dietas TEXT,
+            alimentos_no_gustan TEXT,
+            experiencia_cocina VARCHAR(50),
+            fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
-
-        if resp.status_code == 200:
-            data = resp.json()
-            resultados = data.get("foods", [])
-
-            return render_template(
-                "resultados.html",
-                resultados=resultados,
-                busqueda=alimento
-            )
-
-        flash("No se encontraron alimentos.", "error")
-        return redirect(url_for('alimentos'))
-
-    except Exception as e:
-        print("ERROR:", e)
-        flash("Error al conectar con la API.", "error")
-        return redirect(url_for('alimentos'))
-
-
-@app.route('/food/<int:fdc_id>')
-def food(fdc_id):
-    try:
-        resp = requests.get(
-            f"{API_BASE}/foods/{fdc_id}",
-            params={"api_key": API_KEY}
+    ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS usuario_objetivos (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            usuario_id INT NOT NULL,
+            objetivo VARCHAR(150) NOT NULL,
+            FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
         )
+    ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS usuario_alergias (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            usuario_id INT NOT NULL,
+            alergia VARCHAR(150) NOT NULL,
+            FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+        )
+    ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS usuario_intolerancias (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            usuario_id INT NOT NULL,
+            intolerancia VARCHAR(150) NOT NULL,
+            FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+        )
+    ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS usuario_dietas (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            usuario_id INT NOT NULL,
+            dieta VARCHAR(150) NOT NULL,
+            FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+        )
+    ''')
+    mysql.connection.commit()
+    cursor.close()
 
-        if resp.status_code == 200:
-            comida = resp.json()
-            return render_template("food.html", comida=comida)
-
-        flash("No se pudo obtener la información del alimento.", "error")
-        return redirect(url_for('alimentos'))
-
-    except Exception as e:
-        print("ERROR:", e)
-        flash("Error al conectar con la API.", "error")
-        return redirect(url_for('alimentos'))
-
+def email_existe(correo):
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT id FROM usuarios WHERE correo = %s", (correo,))
+    existe = cursor.fetchone() is not None
+    cursor.close()
+    return existe
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
+@app.route('/buscar', methods=['POST'])
+def buscar():
+    alimento = request.form.get('nombre', '').strip()
+    if not alimento:
+        flash("Ingresa el nombre del alimento.", "error")
+        return redirect(url_for('alimentos'))
+    try:
+        resp = requests.get(f"{API_BASE}/foods/search", params={"api_key": API_KEY, "query": alimento, "pageSize": 20})
+        if resp.status_code == 200:
+            data = resp.json()
+            resultados = data.get("foods", [])
+            return render_template("resultados.html", resultados=resultados, busqueda=alimento)
+        flash("No se encontraron alimentos.", "error")
+        return redirect(url_for('alimentos'))
+    except Exception as e:
+        print("ERROR buscar:", e)
+        flash("Error al conectar con la API.", "error")
+        return redirect(url_for('alimentos'))
 
-@app.route('/registro', methods=['GET', 'POST'])
-def registro():
-    if request.method == 'POST':
-        session['usuario'] = {
-            key: request.form.get(key)
-            for key in [
-                'nombre', 'apellidos', 'correo', 'fecha_nacimiento', 'sexo',
-                'peso', 'altura', 'actividad_fisica', 'objetivos',
-                'alimentos_no_gustan', 'experiencia_cocina'
-            ]
-        }
-        session['usuario']['alergias'] = request.form.getlist('alergias')
-        session['usuario']['intolerancias'] = request.form.getlist('intolerancias')
-        session['usuario']['dietas'] = request.form.getlist('dietas')
+@app.route('/food/<int:fdc_id>')
+def food(fdc_id):
+    try:
+        resp = requests.get(f"{API_BASE}/foods/{fdc_id}", params={"api_key": API_KEY})
+        if resp.status_code == 200:
+            comida = resp.json()
+            return render_template("food.html", comida=comida)
+        flash("No se pudo obtener la información del alimento.", "error")
+        return redirect(url_for('alimentos'))
+    except Exception as e:
+        print("ERROR food:", e)
+        flash("Error al conectar con la API.", "error")
+        return redirect(url_for('alimentos'))
 
-        return redirect(url_for('perfil'))
+@app.route('/alimentos')
+def alimentos():
+    return render_template('alimentos.html')
 
-    return render_template('registro.html')
+def registrar_usuario_db(form):
+    cursor = mysql.connection.cursor()
 
+    nombre = form['nombre']
+    apellidos = form['apellidos']
+    correo = form['correo']
+    password = generate_password_hash(form['password'])
+    fecha_nacimiento = form['fecha_nacimiento'] or None
+    sexo = form['sexo']
+    peso = float(form['peso']) if form['peso'] else None
+    altura = float(form['altura']) if form['altura'] else None
+    actividad_fisica = form['actividad_fisica']
+    objetivos = form['objetivos']
+    alimentos_no_gustan = form['alimentos_no_gustan']
+    experiencia_cocina = form['experiencia_cocina']
 
-@app.route('/login', methods=['GET', 'POST'])
+    # Multi-selección guardada como JSON
+    alergias = json.dumps(form.getlist('alergias'), ensure_ascii=False)
+    intolerancias = json.dumps(form.getlist('intolerancias'), ensure_ascii=False)
+    dietas = json.dumps(form.getlist('dietas'), ensure_ascii=False)
+
+    query = """
+        INSERT INTO usuarios
+        (nombre, apellidos, correo, password, fecha_nacimiento, sexo, peso, altura, actividad_fisica,
+         objetivos, alergias, intolerancias, dietas, alimentos_no_gustan, experiencia_cocina)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
+
+    values = (nombre, apellidos, correo, password, fecha_nacimiento, sexo, peso, altura,
+              actividad_fisica, objetivos, alergias, intolerancias, dietas,
+              alimentos_no_gustan, experiencia_cocina)
+
+    cursor.execute(query, values)
+    mysql.connection.commit()
+    cursor.close()
+
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == 'POST':
-        correo = request.form.get('correo')
-        password = request.form.get('password')
+    if request.method == "POST":
+        correo = request.form["correo"]
+        password = request.form["password"]
 
+        cursor = mysql.connection.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM usuarios WHERE correo = %s", (correo,))
+        usuario = cursor.fetchone()
+        cursor.close()
 
-        USUARIO_VALIDO = "usuario@correo.com"
-        PASSWORD_VALIDO = "1234"
+        if usuario:
+      
+            if check_password_hash(usuario["password"], password):
 
-        if correo == USUARIO_VALIDO and password == PASSWORD_VALIDO:
-            session['usuario'] = {
-                'correo': correo,
-                'nombre': 'Usuario Demo'
-            }
-            flash("Inicio de sesión exitoso.", "success")
-            return redirect(url_for('perfil'))
+                session["usuario_id"] = usuario["id"]
 
-        flash("Correo o contraseña incorrectos.", "error")
-        return redirect(url_for('login'))
+                return redirect("/perfil")
 
-    return render_template('login.html')
+            else:
+                return "Contraseña incorrecta"
+
+        else:
+            return "Correo no encontrado"
+
+    return render_template("login.html")
+
 
 @app.route('/logout')
 def logout():
@@ -118,38 +195,27 @@ def logout():
 
 
 
-
 @app.route('/perfil')
 def perfil():
-    if not session.get('usuario'):
-        return redirect(url_for('registro'))
-    return render_template('perfil.html', usuario=session['usuario'])
+    if "user_email" not in session:
+        return redirect(url_for("login"))
 
+    cursor = mysql.connection.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM usuarios WHERE correo=%s", (session["user_email"],))
+    usuario = cursor.fetchone()
+    cursor.close()
 
-@app.route('/planes')
-def planes():
-    return render_template('planes.html')
+    usuario["alergias"] = json.loads(usuario["alergias"]) if usuario["alergias"] else []
+    usuario["intolerancias"] = json.loads(usuario["intolerancias"]) if usuario["intolerancias"] else []
+    usuario["dietas"] = json.loads(usuario["dietas"]) if usuario["dietas"] else []
 
+    return render_template("perfil.html", usuario=usuario)
 
-@app.route('/alimentos')
-def alimentos():
-    return render_template('alimentos.html')
 
 
 @app.route('/imc')
 def imc():
     return render_template('imc.html')
-
-
-@app.route('/acerca')
-def acerca():
-    return render_template('acerca.html')
-
-
-@app.route('/recetas')
-def recetas():
-    return render_template('recetas.html')
-
 
 @app.route('/tmb', methods=['GET', 'POST'])
 def tmb():
@@ -165,16 +231,14 @@ def tmb():
             resultado = 447.6 + (9.2 * peso) + (3.1 * altura) - (4.3 * edad)
     return render_template('tmb.html', resultado=resultado)
 
-
 @app.route('/gasto-calorico', methods=['GET', 'POST'])
 def gasto_calorico():
     resultado = None
-    if request.method == 'POST':  
+    if request.method == 'POST':
         tmb_val = float(request.form['tmb'])
         factor = float(request.form['factor'])
         resultado = tmb_val * factor
     return render_template('gasto_calorico.html', resultado=resultado)
-
 
 @app.route('/peso-ideal', methods=['GET', 'POST'])
 def peso_ideal():
@@ -185,11 +249,10 @@ def peso_ideal():
         resultado = (22 if sexo == 'hombre' else 21) * (altura_m ** 2)
     return render_template('peso_ideal.html', resultado=resultado)
 
-
 @app.route('/macros', methods=['GET', 'POST'])
 def macros():
     resultado = None
-    if request.method == 'POST':   
+    if request.method == 'POST':
         calorias = float(request.form['calorias'])
         prote = calorias * 0.30 / 4
         carbs = calorias * 0.40 / 4
@@ -200,69 +263,49 @@ def macros():
             'grasas': round(grasas, 1)
         }
     return render_template('macros.html', resultado=resultado)
-@app.route('/recetas-simple', methods=['GET', 'POST'])
-def recetas_simple():
+
+@app.route('/calrecetas', methods=['GET', 'POST'])
+def calrecetas():
     resultados = []
     total = {"kcal": 0, "prote": 0, "carbs": 0, "grasas": 0}
-
     if request.method == 'POST':
         nombres = request.form.getlist('nombre')
         gramos_list = request.form.getlist('gramos')
-
         for i in range(len(nombres)):
             nombre = nombres[i]
             gramos = float(gramos_list[i]) if gramos_list[i] else 0
-
-        
-            busqueda = requests.get(
-                f"{API_BASE}/foods/search",
-                params={"api_key": API_KEY, "query": nombre, "pageSize": 1}
-            ).json()
-
+            busqueda = requests.get(f"{API_BASE}/foods/search", params={"api_key": API_KEY, "query": nombre, "pageSize": 1}).json()
             if not busqueda.get("foods"):
                 continue
-
             fdc_id = busqueda["foods"][0]["fdcId"]
-
-            detalle = requests.get(
-                f"{API_BASE}/foods/{fdc_id}",
-                params={"api_key": API_KEY}
-            ).json()
-
+            detalle = requests.get(f"{API_BASE}/foods/{fdc_id}", params={"api_key": API_KEY}).json()
             kcal = prote = carbs = grasas = 0
-
-            for n in detalle["foodNutrients"]:
-                name = n["nutrientName"].lower()
-                if "energy" in name and n["unitName"] == "kcal":
-                    kcal = n["value"]
+            for n in detalle.get("foodNutrients", []):
+                name = n.get("nutrientName","").lower()
+                unit = n.get("unitName","")
+                if "energy" in name and unit.lower() == "kcal":
+                    kcal = n.get("value",0)
                 elif "protein" in name:
-                    prote = n["value"]
+                    prote = n.get("value",0)
                 elif "carbohydrate" in name:
-                    carbs = n["value"]
+                    carbs = n.get("value",0)
                 elif "fat" in name and "total" in name:
-                    grasas = n["value"]
-
+                    grasas = n.get("value",0)
             factor = gramos / 100
-
             datos = {
-                "nombre": detalle["description"],
+                "nombre": detalle.get("description",""),
                 "gramos": gramos,
                 "kcal": kcal * factor,
                 "prote": prote * factor,
                 "carbs": carbs * factor,
                 "grasas": grasas * factor
             }
-
             resultados.append(datos)
-
             total["kcal"] += datos["kcal"]
             total["prote"] += datos["prote"]
             total["carbs"] += datos["carbs"]
             total["grasas"] += datos["grasas"]
-
-    return render_template("recetas_simple.html", resultados=resultados, total=total)
-
-
+    return render_template("calrecetas.html", resultados=resultados, total=total)
 
 @app.route('/respuesta_correcta')
 def respuesta_correcta():
@@ -274,7 +317,8 @@ def respuesta_incorrecta():
     mensaje = "no le atinaste pa."
     return render_template('respuesta.html', mensaje=mensaje)
 
-
-
 if __name__ == '__main__':
+    with app.app_context():
+        crear_tablas()
     app.run(debug=True)
+

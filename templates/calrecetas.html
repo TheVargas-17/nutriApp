@@ -1,13 +1,14 @@
 {% extends "base.html" %}
-{% block title %}Recetas Simples{% endblock %}
+{% block title %}calculadora de recetas{% endblock %}
 
 {% block content %}
 
-<h2 class="text-center mb-3">Calculadora simple de recetas (API USDA)</h2>
+<h2 class="text-center mb-3">Calculadora de recetas</h2>
 
 <form method="POST">
     <div id="lista">
 
+        <!-- INGREDIENTE 1 -->
         <div class="row mb-3 ingrediente">
             <div class="col-md-6">
                 <label>Alimento</label>
@@ -20,9 +21,34 @@
             </div>
         </div>
 
+        <!-- INGREDIENTE 2 -->
+        <div class="row mb-3 ingrediente">
+            <div class="col-md-6">
+                <label>Alimento</label>
+                <input type="text" name="nombre" class="form-control" placeholder="Ej: arroz" required>
+            </div>
+
+            <div class="col-md-3">
+                <label>Gramos usados</label>
+                <input type="number" name="gramos" class="form-control" required>
+            </div>
+        </div>
+
+        <!-- INGREDIENTE 3 -->
+        <div class="row mb-3 ingrediente">
+            <div class="col-md-6">
+                <label>Alimento</label>
+                <input type="text" name="nombre" class="form-control" placeholder="Ej: verduras" required>
+            </div>
+
+            <div class="col-md-3">
+                <label>Gramos usados</label>
+                <input type="number" name="gramos" class="form-control" required>
+            </div>
+        </div>
+
     </div>
 
-    <button type="button" class="btn btn-secondary mb-3" onclick="add()">+ Ingrediente</button>
     <button class="btn btn-primary w-100" type="submit">Calcular</button>
 </form>
 
@@ -50,13 +76,5 @@
     <li class="list-group-item"><strong>Grasas:</strong> {{ total.grasas|round(1) }} g</li>
 </ul>
 {% endif %}
-
-<script>
-function add() {
-    const div = document.querySelector(".ingrediente").cloneNode(true);
-    div.querySelectorAll("input").forEach(i => i.value = "");
-    document.getElementById("lista").appendChild(div);
-}
-</script>
 
 {% endblock %}

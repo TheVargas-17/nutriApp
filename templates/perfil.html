@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -21,11 +20,10 @@
                     <p><strong>Dietas:</strong> {{ ', '.join(usuario.dietas) if usuario.dietas else 'Ninguna' }}</p>
                     <p><strong>Alimentos que no le gustan:</strong> {{ usuario.alimentos_no_gustan }}</p>
                     <p><strong>Nivel de Experiencia en Cocina:</strong> {{ usuario.experiencia_cocina }}</p>
-                    <a href="/" class="btn btn-outline-secondary mt-3">Cerrar sesión</a>
+                    <a href="/logout" class="btn btn-outline-secondary mt-3">Cerrar sesión</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}

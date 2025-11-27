@@ -44,6 +44,8 @@
 
                         {% if session.usuario %}
                         <li><a class="dropdown-item" href="/macros">Macronutrientes</a></li>
+                        
+                        <li><a class="dropdown-item" href="/calrecetas">Calculadora de Recetas</a></li>
                         {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="/login">Iniciar sesión</a>
@@ -51,6 +53,8 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/registro">Registrarme</a>
                         </li>
+
+                        
                     {% endif %}
                     
                     </ul>
@@ -58,9 +62,7 @@
 
                 
 {% if session.usuario %}
-<li class="nav-item">
-    <a class="nav-link" href="/calrecetas">Calculadora de Recetas</a>
-</li>
+
 
 
 <li class="nav-item">
