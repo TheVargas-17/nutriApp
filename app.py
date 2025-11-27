@@ -124,6 +124,26 @@ def food(fdc_id):
 def alimentos():
     return render_template('alimentos.html')
 
+@app.route("/registro", methods=["GET", "POST"])
+def registro():
+    if request.method == "POST":
+        form = request.form
+        correo = form['correo']
+
+       
+        if email_existe(correo):
+            flash("El correo ya está registrado", "error")
+            return render_template("registrar.html")
+
+       
+        registrar_usuario_db(form)
+        flash("Registro exitoso, ahora puedes iniciar sesión", "success")
+        return redirect(url_for("login"))
+
+    
+    return render_template("registro.html")
+
+
 def registrar_usuario_db(form):
     cursor = mysql.connection.cursor()
 
@@ -213,9 +233,46 @@ def perfil():
 
 
 
-@app.route('/imc')
+
+@app.route('/imc', methods=['GET', 'POST'])
 def imc():
-    return render_template('imc.html')
+    resultado = None
+
+    if request.method == 'POST':
+        try:
+            edad = int(request.form['edad'])
+            sexo = request.form['sexo']
+            peso = float(request.form['peso'])
+            altura = float(request.form['altura'])
+
+            if altura == 0:
+                raise ValueError("Altura no puede ser 0")
+
+            imc = round(peso / (altura ** 2), 2)
+
+            if imc < 18.5:
+                mensaje = 'Bajo peso'
+            elif imc < 25:
+                mensaje = 'Normal'
+            elif imc < 30:
+                mensaje = 'Sobrepeso'
+            else:
+                mensaje = 'Obesidad'
+
+            resultado = {
+                'imc': imc,
+                'mensaje': mensaje,
+                'edad': edad,
+                'sexo': sexo.capitalize()
+            }
+
+        except Exception as e:
+            resultado = {'error': f'Error: {e}'}
+
+    return render_template('imc.html', resultado=resultado)
+
+
+
 
 @app.route('/tmb', methods=['GET', 'POST'])
 def tmb():
@@ -317,6 +374,13 @@ def respuesta_incorrecta():
     mensaje = "no le atinaste pa."
     return render_template('respuesta.html', mensaje=mensaje)
 
+@app.route('/acerca')
+def acerca():
+    return render_template('acerca.html')
+
+@app.route('/planes')
+def planes():
+    return render_template('planes.html')
 if __name__ == '__main__':
     with app.app_context():
         crear_tablas()
