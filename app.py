@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import requests
 from flask_mysqldb import MySQL
+from MySQLdb.cursors import DictCursor
+
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 
@@ -19,7 +21,7 @@ app.config['MYSQL_DB'] = 'bsdnutri'
 mysql = MySQL(app)
 
 def crear_tablas():
-    cursor = mysql.connection.cursor()
+    cursor = mysql.connection.cursor(DictCursor)
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS usuarios (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -77,7 +79,7 @@ def crear_tablas():
     cursor.close()
 
 def email_existe(correo):
-    cursor = mysql.connection.cursor()
+    cursor = mysql.connection.cursor(DictCursor)
     cursor.execute("SELECT id FROM usuarios WHERE correo = %s", (correo,))
     existe = cursor.fetchone() is not None
     cursor.close()
@@ -145,8 +147,7 @@ def registro():
 
 
 def registrar_usuario_db(form):
-    cursor = mysql.connection.cursor()
-
+    cursor = mysql.connection.cursor(DictCursor)
     nombre = form['nombre']
     apellidos = form['apellidos']
     correo = form['correo']
@@ -185,16 +186,16 @@ def login():
         correo = request.form["correo"]
         password = request.form["password"]
 
-        cursor = mysql.connection.cursor(dictionary=True)
+        cursor = mysql.connection.cursor(DictCursor)
         cursor.execute("SELECT * FROM usuarios WHERE correo = %s", (correo,))
         usuario = cursor.fetchone()
         cursor.close()
 
         if usuario:
-      
             if check_password_hash(usuario["password"], password):
 
                 session["usuario_id"] = usuario["id"]
+                session["user_email"] = usuario["correo"]
 
                 return redirect("/perfil")
 
@@ -205,6 +206,7 @@ def login():
             return "Correo no encontrado"
 
     return render_template("login.html")
+
 
 
 @app.route('/logout')
@@ -220,7 +222,7 @@ def perfil():
     if "user_email" not in session:
         return redirect(url_for("login"))
 
-    cursor = mysql.connection.cursor(dictionary=True)
+    cursor = mysql.connection.cursor(DictCursor)
     cursor.execute("SELECT * FROM usuarios WHERE correo=%s", (session["user_email"],))
     usuario = cursor.fetchone()
     cursor.close()
@@ -230,6 +232,7 @@ def perfil():
     usuario["dietas"] = json.loads(usuario["dietas"]) if usuario["dietas"] else []
 
     return render_template("perfil.html", usuario=usuario)
+
 
 
 
