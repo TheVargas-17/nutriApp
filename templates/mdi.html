@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Educación e Información{% endblock %}
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="text-center mb-4 fw-bold">📘 Módulo de Educación e Información</h2>
+
+    <!-- Artículos educativos -->
+    <div class="card shadow-lg mb-5">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Artículos Educativos</h4>
+        </div>
+        <div class="card-body">
+
+            <div class="list-group">
+
+                <a href="#" class="list-group-item list-group-item-action">
+                    <h5 class="fw-bold">¿Cómo leer las etiquetas nutricionales?</h5>
+                    <p class="mb-1">Aprende a identificar calorías, grasas, azúcares y otros elementos esenciales.</p>
+                </a>
+
+                <a href="#" class="list-group-item list-group-item-action mt-2">
+                    <h5 class="fw-bold">Mitos y verdades sobre las dietas de moda</h5>
+                    <p class="mb-1">Descubre qué funciona realmente y qué puede ser peligroso.</p>
+                </a>
+
+                <a href="#" class="list-group-item list-group-item-action mt-2">
+                    <h5 class="fw-bold">Guía completa de macronutrientes</h5>
+                    <p class="mb-1">Carbohidratos, proteínas y grasas: qué son y para qué sirven.</p>
+                </a>
+
+                <a href="#" class="list-group-item list-group-item-action mt-2">
+                    <h5 class="fw-bold">Importancia de la hidratación, fibra y micronutrientes</h5>
+                    <p class="mb-1">Claves para una alimentación equilibrada.</p>
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Recursos descargables -->
+    <div class="card shadow-lg mb-5">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">📄 Recursos Descargables</h4>
+        </div>
+
+        <div class="card-body">
+
+            <div class="list-group">
+
+                <a href="/static/recursos/planilla_ejercicios.pdf" 
+                   class="list-group-item list-group-item-action" download>
+                    <h5 class="fw-bold">Planilla de Ejercicios Básicos</h5>
+                    <p class="mb-1">Rutina simple para complementar tu nutrición y mantener actividad física.</p>
+                </a>
+
+                
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

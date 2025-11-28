@@ -194,10 +194,11 @@ def login():
         if usuario:
             if check_password_hash(usuario["password"], password):
 
+                session["usuario"] = usuario["correo"]
                 session["usuario_id"] = usuario["id"]
-                session["user_email"] = usuario["correo"]
 
                 return redirect("/perfil")
+
 
             else:
                 return "Contraseña incorrecta"
@@ -219,11 +220,11 @@ def logout():
 
 @app.route('/perfil')
 def perfil():
-    if "user_email" not in session:
+    if "usuario" not in session:
         return redirect(url_for("login"))
 
     cursor = mysql.connection.cursor(DictCursor)
-    cursor.execute("SELECT * FROM usuarios WHERE correo=%s", (session["user_email"],))
+    cursor.execute("SELECT * FROM usuarios WHERE correo=%s", (session["usuario"],))
     usuario = cursor.fetchone()
     cursor.close()
 
@@ -232,6 +233,7 @@ def perfil():
     usuario["dietas"] = json.loads(usuario["dietas"]) if usuario["dietas"] else []
 
     return render_template("perfil.html", usuario=usuario)
+
 
 
 
@@ -384,6 +386,17 @@ def acerca():
 @app.route('/planes')
 def planes():
     return render_template('planes.html')
+
+@app.route('/recetas')
+def recetas():
+    return render_template('recetas.html')
+
+
+@app.route('/mdi')
+def mdi():
+    return render_template('mdi.html')
+
+
 if __name__ == '__main__':
     with app.app_context():
         crear_tablas()

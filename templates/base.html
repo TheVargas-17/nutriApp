@@ -9,13 +9,13 @@
 </head>
 <body class="bg-white">
 
-   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
-    
-   <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
-  <img src="/static/img/okey.png" alt="Logo" width="70" height="70" class="me-2">
-  La Tragona<em>pp</em>
-</a>
+
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
+            <img src="/static/img/okey.png" alt="Logo" width="70" height="70" class="me-2">
+            La TragonaApp
+        </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarNav" aria-controls="navbarNav"
@@ -31,65 +31,51 @@
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button"
+                    <a class="nav-link dropdown-toggle active" href="#" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
                         Calculadoras
                     </a>
                     <ul class="dropdown-menu">
-
-                        <li><a class="dropdown-item" href="/imc">IMC</a></li>
-                        <li><a class="dropdown-item" href="/tmb">TMB</a></li>
-                        <li><a class="dropdown-item" href="/gasto-calorico">Gasto Calórico Total</a></li>
-                        <li><a class="dropdown-item" href="/peso-ideal">Peso Ideal</a></li>
+                        <li><a class="dropdown-item  active" href="/imc">IMC</a></li>
+                        <li><a class="dropdown-item  active" href="/tmb">TMB</a></li>
+                        <li><a class="dropdown-item  active" href="/gasto-calorico">Gasto Calórico Total</a></li>
+                        <li><a class="dropdown-item  active" href="/peso-ideal">Peso Ideal</a></li>
 
                         {% if session.usuario %}
-                        <li><a class="dropdown-item" href="/macros">Macronutrientes</a></li>
-                        
-                        <li><a class="dropdown-item" href="/calrecetas">Calculadora de Recetas</a></li>
-                        {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="/login">Iniciar sesión</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/registro">Registrarme</a>
-                        </li>
+                        <li><a class="dropdown-item  active" href="/macros">Macronutrientes</a></li>
+                        <li><a class="dropdown-item  active" href="/calrecetas">Calculadora de Recetas</a></li>
+                        {% endif %}
 
-                        
-                    {% endif %}
-                    
                     </ul>
                 </li>
-
-                
-{% if session.usuario %}
-
-
-
-<li class="nav-item">
-    <a class="nav-link" href="/recetas">Recetas</a>
-</li>
-
-    <li class="nav-item">
-        <a class="nav-link" href="/perfil">Perfil</a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link" href="/logout">Cerrar sesión</a>
-    </li>
-
-{% else %}
-    <li class="nav-item">
-        <a class="nav-link" href="/login">Iniciar sesión</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/registro">Registrarme</a>
-    </li>
-{% endif %}
-
-
-                
                 <li class="nav-item">
-                    <a class="nav-link" href="/acerca">Sobre la App</a>
+                    <a class="nav-link active" href="mdi">  Artículos Educativos</a>
+                </li>
+
+
+
+
+                {% if session.usuario %}
+                    <li class="nav-item">
+                        <a class="nav-link  active" href="/recetas">Recetas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link  active" href="/perfil">Perfil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link  active" href="/logout">Cerrar sesión</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link  active" href="/login">Iniciar sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link  active" href="/registro">Registrarme</a>
+                    </li>
+                {% endif %}
+
+                <li class="nav-item">
+                    <a class="nav-link  active" href="/acerca">Sobre la App</a>
                 </li>
 
             </ul>
@@ -97,12 +83,11 @@
     </div>
 </nav>
 
+<main class="container mt-4">
+    {% block content %}
+    {% endblock %}
+</main>
 
-    <main class="container mt-4">
-        {% block content %}
-        {% endblock %}
-    </main>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
