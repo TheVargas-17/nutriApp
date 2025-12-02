@@ -111,16 +111,24 @@ def buscar():
 @app.route('/food/<int:fdc_id>')
 def food(fdc_id):
     try:
-        resp = requests.get(f"{API_BASE}/foods/{fdc_id}", params={"api_key": API_KEY})
+        url = f"{API_BASE}/food/{fdc_id}" 
+        resp = requests.get(url, params={"api_key": API_KEY})
+
+        print("URL solicitada:", url)  
+        print("Status:", resp.status_code)
+
         if resp.status_code == 200:
             comida = resp.json()
             return render_template("food.html", comida=comida)
+
         flash("No se pudo obtener la información del alimento.", "error")
         return redirect(url_for('alimentos'))
+
     except Exception as e:
         print("ERROR food:", e)
         flash("Error al conectar con la API.", "error")
         return redirect(url_for('alimentos'))
+
 
 @app.route('/alimentos')
 def alimentos():
@@ -391,10 +399,10 @@ def planes():
 def recetas():
     return render_template('recetas.html')
 
+@app.route('/refood')
+def refood():
+    return render_template('refood.html')
 
-@app.route('/mdi')
-def mdi():
-    return render_template('mdi.html')
 
 
 if __name__ == '__main__':
